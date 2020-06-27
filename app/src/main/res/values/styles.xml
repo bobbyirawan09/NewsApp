@@ -1,0 +1,49 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="Title2.Black" parent="AppTheme">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">16sp</item>
+        <item name="fontFamily">sans-serif</item>
+    </style>
+
+    <style name="Title2.Black.Bold" parent="Title2.Black">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Body1.Black" parent="AppTheme">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">sans-serif</item>
+    </style>
+
+    <style name="Body1.Black.Bold" parent="Body1.Black">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Body2.Black" parent="AppTheme">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">12sp</item>
+        <item name="fontFamily">sans-serif</item>
+    </style>
+
+    <style name="Body2.White" parent="AppTheme">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="Body2.Black.Bold" parent="Body2.Black">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Body2.White.Bold" parent="Body2.White">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+</resources>

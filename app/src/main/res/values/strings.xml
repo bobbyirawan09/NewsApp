@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">NewsApp</string>
+    <string name="search_source_title">Search Source</string>
+    <string name="loading_title">Loading...</string>
+    <string name="search_article_title">Search Article</string>
+</resources>
