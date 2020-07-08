@@ -12,30 +12,45 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import bobby.irawan.newsapp.AppController
 import bobby.irawan.newsapp.databinding.ActivityArticleBinding
+import bobby.irawan.newsapp.di.viewmodel.ViewModelProviderFactory
 import bobby.irawan.newsapp.presentation.article.adapter.ArticleAdapter
 import bobby.irawan.newsapp.presentation.article.viewmodel.ArticleViewModel
 import bobby.irawan.newsapp.presentation.model.ArticleModelView
 import bobby.irawan.newsapp.utils.Constants.EXTRA_SOURCE_ID
 import bobby.irawan.newsapp.utils.Constants.EXTRA_TITLE
+import bobby.irawan.newsapp.utils.isInternetConnected
 import bobby.irawan.newsapp.utils.setGone
 import bobby.irawan.newsapp.utils.setVisible
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout.END_ICON_CLEAR_TEXT
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import javax.inject.Inject
 
 class ArticleActivity : AppCompatActivity(), ArticleAdapter.ClickListener,
     TextView.OnEditorActionListener {
     private lateinit var binding: ActivityArticleBinding
-    private val articleViewModel by viewModel<ArticleViewModel>()
+    lateinit var articleViewModel: ArticleViewModel
+
+    @Inject
+    lateinit var providerFactory: ViewModelProviderFactory
     private val adapter by lazy {
         ArticleAdapter()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        val articleComponent =
+            (application as AppController).appComponent.articleComponent().create()
+        articleComponent.inject(this)
+
         super.onCreate(savedInstanceState)
         binding = ActivityArticleBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        articleViewModel =
+            ViewModelProvider(this, providerFactory).get(ArticleViewModel::class.java)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
@@ -111,7 +126,10 @@ class ArticleActivity : AppCompatActivity(), ArticleAdapter.ClickListener,
     }
 
     override fun onLoadNextPage() {
-        articleViewModel.getNextArticleData()
+        articleViewModel.getNextArticleData(
+            AppController.getInstance()
+                .isInternetConnected()
+        )
     }
 
     override fun onClick(article: ArticleModelView) {
@@ -133,7 +151,7 @@ class ArticleActivity : AppCompatActivity(), ArticleAdapter.ClickListener,
             val imm: InputMethodManager =
                 applicationContext.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(p0?.windowToken, 0)
-            articleViewModel.getArticleData(p0?.text.toString())
+            articleViewModel.getArticleData(p0?.text.toString(), AppController.getInstance().isInternetConnected())
             return true
         }
         return false

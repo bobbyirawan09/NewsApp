@@ -8,11 +8,12 @@ import bobby.irawan.newsapp.domain.category.CategoryRepository
 import bobby.irawan.newsapp.presentation.model.CategoryModelView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Created by bobbyirawan09 on 27/06/20.
  */
-class CategoryViewModel(private val categoryRepository: CategoryRepository) : ViewModel() {
+class CategoryViewModel @Inject constructor(private val categoryRepository: CategoryRepository) : ViewModel() {
     private val _categoriesLiveData = MutableLiveData<List<CategoryModelView>>()
     val categoriesLiveData: LiveData<List<CategoryModelView>>
         get() = _categoriesLiveData

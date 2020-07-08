@@ -8,34 +8,48 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import bobby.irawan.newsapp.AppController
 import bobby.irawan.newsapp.databinding.ActivitySourceBinding
+import bobby.irawan.newsapp.di.viewmodel.ViewModelProviderFactory
 import bobby.irawan.newsapp.presentation.article.view.ArticleActivity
 import bobby.irawan.newsapp.presentation.model.SourceModelView
 import bobby.irawan.newsapp.presentation.source.adapter.SourceAdapter
 import bobby.irawan.newsapp.presentation.source.viewmodel.SourceViewModel
 import bobby.irawan.newsapp.utils.Constants.EXTRA_CATEGORY_NAME
+import bobby.irawan.newsapp.utils.isInternetConnected
 import bobby.irawan.newsapp.utils.setGone
 import bobby.irawan.newsapp.utils.setVisible
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import javax.inject.Inject
 
 class SourceActivity : AppCompatActivity(), SourceAdapter.ClickListener {
     private lateinit var binding: ActivitySourceBinding
-    private val sourceViewModel by viewModel<SourceViewModel>()
+    private lateinit var sourceViewModel: SourceViewModel
+
+    @Inject
+    lateinit var providerFactory: ViewModelProviderFactory
+
     private val adapter by lazy {
         SourceAdapter()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        val sourceComponent = (application as AppController).appComponent.sourceComponent().create()
+        sourceComponent.inject(this)
+
         super.onCreate(savedInstanceState)
         binding = ActivitySourceBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        sourceViewModel = ViewModelProvider(this, providerFactory).get(SourceViewModel::class.java)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         onInitUi()
         onSetLoadingState()
         sourceViewModel.getBundle(intent)
+            sourceViewModel.getSourceData(applicationContext.isInternetConnected())
         observerViewModel()
     }
 

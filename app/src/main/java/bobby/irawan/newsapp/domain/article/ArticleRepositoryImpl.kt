@@ -4,11 +4,12 @@ import bobby.irawan.newsapp.data.articles.model.ArticlesResponse
 import bobby.irawan.newsapp.data.articles.service.ArticleService
 import bobby.irawan.newsapp.presentation.model.ArticleModelView
 import bobby.irawan.newsapp.utils.Constants.Response
+import javax.inject.Inject
 
 /**
  * Created by bobbyirawan09 on 27/06/20.
  */
-class ArticleRepositoryImpl(private val articleService: ArticleService) : ArticleRepository {
+class ArticleRepositoryImpl @Inject constructor(private val articleService: ArticleService) : ArticleRepository {
     override suspend fun getArticle(keyword: String, sourceName: String, page: Int): Response {
         val convertedReponse: Response
         val response = articleService.getArticles(keyword, sourceName, page)

@@ -13,12 +13,14 @@ import bobby.irawan.newsapp.utils.Constants.Response
 import bobby.irawan.newsapp.utils.isInternetConnected
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Created by bobbyirawan09 on 27/06/20.
  */
 
-class SourceViewModel(private val sourceRepository: SourceRepository) : ViewModel() {
+class SourceViewModel @Inject constructor(private val sourceRepository: SourceRepository) :
+    ViewModel() {
 
     private var sources = listOf<SourceModelView>()
     private var categoryName: String = ""
@@ -43,12 +45,11 @@ class SourceViewModel(private val sourceRepository: SourceRepository) : ViewMode
         if (intent != null) {
             categoryName = intent.getStringExtra(EXTRA_CATEGORY_NAME) ?: ""
             _titleLiveData.postValue(categoryName)
-            getSourceData(categoryName)
         }
     }
 
-    fun getSourceData(categoryName: String) {
-        if (AppController.getInstance().isInternetConnected()) {
+    fun getSourceData(isInternetConnected: Boolean) {
+        if (isInternetConnected) {
             viewModelScope.launch(Dispatchers.Main) {
                 val response = sourceRepository.getSource(categoryName)
                 when (response) {

@@ -5,11 +5,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import bobby.irawan.newsapp.utils.Constants
+import javax.inject.Inject
 
 /**
  * Created by bobbyirawan09 on 27/06/20.
  */
-class ArticleDetailViewModel : ViewModel() {
+
+
+class ArticleDetailViewModel @Inject constructor() : ViewModel() {
 
     private var title = ""
     private var articleUrl = ""

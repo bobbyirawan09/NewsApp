@@ -1,12 +1,9 @@
 package bobby.irawan.newsapp
 
+import android.app.AppComponentFactory
 import android.app.Application
-import bobby.irawan.newsapp.di.dataModule
-import bobby.irawan.newsapp.di.domainModule
-import bobby.irawan.newsapp.di.retrofitModule
-import bobby.irawan.newsapp.di.viewModelModule
-import org.koin.android.ext.koin.androidContext
-import org.koin.core.context.startKoin
+import bobby.irawan.newsapp.di.AppComponent
+import bobby.irawan.newsapp.di.DaggerAppComponent
 
 /**
  * Created by bobbyirawan09 on 26/06/20.
@@ -14,14 +11,14 @@ import org.koin.core.context.startKoin
 
 class AppController : Application() {
 
+    val appComponent: AppComponent by lazy {
+        DaggerAppComponent.factory().create(this)
+    }
+
     override fun onCreate() {
         super.onCreate()
 
         instance = this
-        startKoin {
-            androidContext(this@AppController)
-            modules(retrofitModule, dataModule, viewModelModule, domainModule)
-        }
     }
 
     companion object {

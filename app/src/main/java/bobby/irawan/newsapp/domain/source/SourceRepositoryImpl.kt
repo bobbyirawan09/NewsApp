@@ -4,11 +4,12 @@ import bobby.irawan.newsapp.data.sources.model.SourcesResponse
 import bobby.irawan.newsapp.data.sources.service.SourceService
 import bobby.irawan.newsapp.presentation.model.SourceModelView
 import bobby.irawan.newsapp.utils.Constants
+import javax.inject.Inject
 
 /**
  * Created by bobbyirawan09 on 27/06/20.
  */
-class SourceRepositoryImpl(private val sourceService: SourceService) : SourceRepository {
+class SourceRepositoryImpl @Inject constructor(private val sourceService: SourceService) : SourceRepository {
     override suspend fun getSource(categoryName: String): Constants.Response {
         val convertedReponse: Constants.Response
         val response = sourceService.getSources(categoryName)

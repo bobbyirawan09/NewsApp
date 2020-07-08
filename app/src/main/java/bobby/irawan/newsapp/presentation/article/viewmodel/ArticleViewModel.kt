@@ -12,12 +12,14 @@ import bobby.irawan.newsapp.utils.Constants
 import bobby.irawan.newsapp.utils.isInternetConnected
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Created by bobbyirawan09 on 27/06/20.
  */
 
-class ArticleViewModel(private val articleRepository: ArticleRepository) : ViewModel() {
+class ArticleViewModel @Inject constructor(private val articleRepository: ArticleRepository) :
+    ViewModel() {
     private var articles = mutableListOf<ArticleModelView>()
     private var sourceName: String = ""
     private var title = ""
@@ -57,10 +59,10 @@ class ArticleViewModel(private val articleRepository: ArticleRepository) : ViewM
         }
     }
 
-    fun getArticleData(keyword: String) {
+    fun getArticleData(keyword: String, isInternetConnected: Boolean) {
         _loadingLiveData.postValue(true)
         page = 1
-        if (AppController.getInstance().isInternetConnected()) {
+        if (isInternetConnected) {
             viewModelScope.launch(Dispatchers.Main) {
                 val response = articleRepository.getArticle(keyword, sourceName, page)
                 when (response) {
@@ -83,9 +85,8 @@ class ArticleViewModel(private val articleRepository: ArticleRepository) : ViewM
         }
     }
 
-    fun getNextArticleData() {
-        if (!isLoadingNextPage && isNextPageAvailable && AppController.getInstance()
-                .isInternetConnected()
+    fun getNextArticleData(isInternetConnected: Boolean) {
+        if (!isLoadingNextPage && isNextPageAvailable && isInternetConnected
         ) {
             isLoadingNextPage = true
             _loadingNextPageLiveData.postValue(true)
